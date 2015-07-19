@@ -13,7 +13,7 @@ class RecommendationJob(args: Args) extends Job(args) {
   type Item = Long
   type Rating = Int
   type Input = (User, Item, Rating)
-  val RecommendationsPerTrack = 3
+  val RecommendationsPerItem = 3
 
   val inputSource = args("input")
   val outputSink = args("output")
@@ -42,7 +42,7 @@ class RecommendationJob(args: Args) extends Job(args) {
       (edge.from, edge.to, edge.data)
     }
     .groupBy(_._1)
-    .sortedReverseTake(RecommendationsPerTrack + 1)(Ordering.by(_._3))
+    .sortedReverseTake(RecommendationsPerItem + 1)(Ordering.by(_._3))
     .values
     .flatten
     .filter(tuple => tuple._1 != tuple._2)
